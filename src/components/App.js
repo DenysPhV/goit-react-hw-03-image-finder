@@ -1,9 +1,8 @@
 import { Component } from 'react';
 import Loader from 'react-loader-spinner';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, Flip } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-// import './style.scss';
 import s from './App.module.scss';
 
 import getImagesApi from './services/getImagesApi';
@@ -20,7 +19,6 @@ class App extends Component {
     searchQuery: '',
     isLoading: false,
     largeURL: '',
-    // showModal: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -93,7 +91,7 @@ class App extends Component {
 
         {renderLoadMoreButton && <Button onLoadMore={this.fetchImages} />}
 
-        <ToastContainer autoClose={3000} />
+        <ToastContainer theme="dark" transition={Flip} />
 
         {largeURL && (
           <Modal setLargeURL={this.setLargeURL}>

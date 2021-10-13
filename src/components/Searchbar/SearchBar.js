@@ -2,6 +2,7 @@ import { Component } from 'react';
 
 import { toast } from 'react-toastify';
 
+import PropTypes from 'prop-types';
 import s from './Searchbar.module.scss';
 
 export default class Searchbar extends Component {
@@ -21,7 +22,7 @@ export default class Searchbar extends Component {
 
     if (this.state.query.trim() === '') {
       // alert('Ты ничего не ввел');
-      toast.error('Wow so easy !');
+      toast.error('Please enter at least one letter !');
       return;
     }
   };
@@ -49,3 +50,7 @@ export default class Searchbar extends Component {
     );
   }
 }
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
