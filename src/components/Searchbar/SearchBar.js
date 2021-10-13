@@ -1,5 +1,9 @@
 import { Component } from 'react';
 
+import { toast } from 'react-toastify';
+
+import s from './Searchbar.module.scss';
+
 export default class Searchbar extends Component {
   state = {
     query: '',
@@ -14,15 +18,21 @@ export default class Searchbar extends Component {
 
     this.props.onSubmit(this.state.query);
     this.setState({ query: '' });
+
+    if (this.state.query.trim() === '') {
+      // alert('Ты ничего не ввел');
+      toast.error('Wow so easy !');
+      return;
+    }
   };
 
   render() {
     const { query } = this.state;
     return (
-      <header>
-        <form onSubmit={this.handleSubmit}>
-          <button type="submit">
-            <span>Search</span>
+      <header className={s.Searchbar}>
+        <form onSubmit={this.handleSubmit} className={s.SearchForm}>
+          <button type="submit" className={s.SearchForm__button}>
+            <span className={s.SearchForm__button__label}>Search</span>
           </button>
 
           <input
@@ -32,6 +42,7 @@ export default class Searchbar extends Component {
             placeholder="Search images and photos"
             value={query}
             onChange={this.handleChange}
+            className={s.SearchForm__input}
           />
         </form>
       </header>

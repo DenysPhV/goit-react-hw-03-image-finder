@@ -1,4 +1,7 @@
 import { Component } from 'react';
+import Loader from 'react-loader-spinner';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // import './style.scss';
 import s from './App.module.scss';
@@ -7,14 +10,17 @@ import getImagesApi from './services/getImagesApi';
 
 import Searchbar from './Searchbar';
 import ImageGallery from './ImageGallery';
+import Button from './Button';
+import Modal from './Modal';
 
 class App extends Component {
   state = {
     images: [],
     currentPage: 1,
     searchQuery: '',
-    error: null,
+    isLoading: false,
     largeURL: '',
+    // showModal: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -24,7 +30,7 @@ class App extends Component {
       this.fetchImages();
     }
 
-    if (currentPage > 12) {
+    if (currentPage > 2) {
       window.scrollTo({
         top: document.documentElement.scrollHeight,
         behavior: 'smooth',
@@ -38,10 +44,9 @@ class App extends Component {
 
   onChangeQuery = (query) => {
     this.setState({
-      searchQuery: query,
       images: [],
+      searchQuery: query,
       currentPage: 1,
-      error: null,
       largeURL: '',
     });
   };
@@ -49,6 +54,8 @@ class App extends Component {
   fetchImages = () => {
     const { currentPage, searchQuery } = this.state;
     const options = { searchQuery, currentPage };
+
+    this.setState({ isLoading: true });
 
     getImagesApi
       .fetchData(options)
@@ -58,25 +65,44 @@ class App extends Component {
           currentPage: prevState.currentPage + 1,
         })),
       )
-      .catch((error) => this.setState({ error }));
+      .catch((error) => this.setState({ error }))
+      .finally(() => {
+        return this.setState({ isLoading: false });
+      });
   };
 
   render() {
-    const { images } = this.state;
+    const { images, isLoading, largeURL } = this.state;
+    const renderLoadMoreButton = images.length > 0 && !isLoading;
 
     return (
-      <div className={s.container}>
+      <div className={s.App}>
         <Searchbar onSubmit={this.onChangeQuery} />
 
         <ImageGallery images={images} setLargeURL={this.setLargeURL} />
-        {/* 
-       
-       
-        <Loader />
-        <Button />
-        <Modal /> */}
+
+        {isLoading && (
+          <Loader
+            type="Puff"
+            color="#00BFFF"
+            height={80}
+            width={80}
+            radius={50}
+          />
+        )}
+
+        {renderLoadMoreButton && <Button onLoadMore={this.fetchImages} />}
+
+        <ToastContainer autoClose={3000} />
+
+        {largeURL && (
+          <Modal setLargeURL={this.setLargeURL}>
+            <img src={largeURL} alt="" />
+          </Modal>
+        )}
       </div>
     );
   }
 }
+
 export default App;

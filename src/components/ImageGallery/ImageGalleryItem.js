@@ -1,4 +1,4 @@
-import React from 'react';
+import s from './ImageGaiieryItem.module.scss';
 
 const ImageGalleryItem = ({ images, setLargeURL }) =>
   images.map(({ id, webformatURL, largeImageURL, tags }) => (
@@ -7,6 +7,7 @@ const ImageGalleryItem = ({ images, setLargeURL }) =>
         onClick={() => setLargeURL(largeImageURL)}
         src={webformatURL}
         alt={tags}
+        className={s.ImageGalleryItem__image}
       />
     </li>
   ));
