@@ -91,7 +91,7 @@ class App extends Component {
 
         {renderLoadMoreButton && <Button onLoadMore={this.fetchImages} />}
 
-        <ToastContainer theme="dark" transition={Flip} />
+        <ToastContainer theme="dark" transition={Flip} draggableDirection="y" />
 
         {largeURL && (
           <Modal setLargeURL={this.setLargeURL}>
